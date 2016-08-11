@@ -4,7 +4,6 @@ import os, urllib2, random, tweepy, HTMLParser
 from bs4 import BeautifulSoup
 from time import gmtime, strftime
 from offensive import tact
-from offensive import tact
 from textblob import TextBlob
 from textblob.blob import Word
 from secrets import *
@@ -83,7 +82,7 @@ def build_sentence(d):
 # Check for faulty ending
 def has_bad_ending(sentence):
     words = sentence.split()
-    if words[-1] in faulty_endings:
+    if words[-1].lower() in faulty_endings:
         return True
     else:
         return False
