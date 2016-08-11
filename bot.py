@@ -170,9 +170,7 @@ def process(content_, words_):
             print("\nOffensive content")
             continue
         else:
-            print("\ncalling tweet")
-            print("\n===The tweet is===\n")
-            print(s)
+            s = s.encode('utf-8').translate(None, "'\"")
             if tweet(s):
                 tweetworthy = True
                 return True
