@@ -178,7 +178,7 @@ def process(content_, words_):
 
 def tweet(text):
     for tweet in tweets:
-        if text.lower() == tweet.text.lower():
+        if text.lower() == tweet.text.lower().encode('utf-8'):
             return False
 
     # Send the tweet and log success or failure
