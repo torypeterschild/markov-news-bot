@@ -179,20 +179,19 @@ def process(content_, words_):
 
 
 def tweet(text):
-    # for tweet in tweets:
-    #     if text == tweet.text:
-    #         return False
+    for tweet in tweets:
+        if text.lower() == tweet.text.lower():
+            return False
 
     # Send the tweet and log success or failure
     try:
-        api.update_status(text)
+        api.update_status(text.title())
     except tweepy.error.TweepError as e:
         log(e.message)
     else:
-        print("Success: %s" % text)
-        log("Tweeted: " + text)
+        print("Success: %s" % text.title())
+        log("Tweeted: " + text.title())
         return True
-    return True
 
 
 def log(message):
