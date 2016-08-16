@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os, urllib2, random, tweepy, HTMLParser
+import os, re, urllib2, random, tweepy, HTMLParser
 from bs4 import BeautifulSoup
 from time import gmtime, strftime
 from offensive import tact
@@ -26,7 +26,8 @@ tweets = tweepy.Cursor(api.user_timeline).items()
 hparser = HTMLParser.HTMLParser()
 
 EOS = ['.', '?', '!']
-faulty_endings = ["mrs.", "mr.", "dr.", "vs."]
+faulty_endings = ["mrs.", "mr.", "dr.", "vs.", "ms.", "pres."]
+apostrophe_s = re.compile(r"'s", re.IGNORECASE)
 
 
 def build_ngram_dict(words):
@@ -171,8 +172,9 @@ def process(content_, words_):
         else:
             s = s.encode('utf-8').translate(None, "'\"")
             if tweet(s):
-                tweetworthy = True
-                return True
+                break
+            else:
+                continue
 
 
 def tweet(text):
@@ -182,12 +184,14 @@ def tweet(text):
 
     # Send the tweet and log success or failure
     try:
-        api.update_status(text.title())
+        text = text.title()
+        text_ = re.sub(apostrophe_s, "'s", text) 
+        api.update_status(text_)
     except tweepy.error.TweepError as e:
         log(e.message)
     else:
-        print("Success: %s" % text.title())
-        log("Tweeted: " + text.title())
+        print("Success: %s" % text_)
+        log("Tweeted: " + text_)
         return True
 
 
