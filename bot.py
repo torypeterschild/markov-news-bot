@@ -27,7 +27,7 @@ hparser = HTMLParser.HTMLParser()
 
 EOS = ['.', '?', '!']
 faulty_endings = ["mrs.", "mr.", "dr.", "vs.", "ms.", "pres."]
-apostrophe_s = re.compile(r"'s", re.IGNORECASE)
+apostrophe_s = re.compile(r"'S", re.IGNORECASE)
 
 
 def build_ngram_dict(words):
