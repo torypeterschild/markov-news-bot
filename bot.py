@@ -27,7 +27,7 @@ hparser = HTMLParser.HTMLParser()
 
 EOS = ['.', '?', '!']
 faulty_endings = ["mrs.", "mr.", "dr.", "vs.", "ms.", "pres."]
-apostrophe_s = re.compile(r"'S", re.IGNORECASE)
+apostrophe_s = re.compile(r"'S")
 
 
 def build_ngram_dict(words):
@@ -185,13 +185,13 @@ def tweet(text):
     # Send the tweet and log success or failure
     try:
         text = text.title()
-        text_ = re.sub(apostrophe_s, "'s", text) 
-        api.update_status(text_)
+        text = re.sub(apostrophe_s, "'s", text) 
+        api.update_status(text)
     except tweepy.error.TweepError as e:
         log(e.message)
     else:
-        print("Success: %s" % text_)
-        log("Tweeted: " + text_)
+        print("Success: %s" % text)
+        log("Tweeted: " + text)
         return True
 
 
