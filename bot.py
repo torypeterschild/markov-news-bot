@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os, re, urllib2, random, tweepy, HTMLParser
+import os, re, urllib2, random, tweepy, HTMLParser, string
 from bs4 import BeautifulSoup
 from time import gmtime, strftime
 from offensive import tact
@@ -26,8 +26,9 @@ tweets = tweepy.Cursor(api.user_timeline).items()
 hparser = HTMLParser.HTMLParser()
 
 EOS = ['.', '?', '!']
+initial = re.compile(r"^[a-zA-Z](\.)$")
 faulty_endings = ["mrs.", "mr.", "dr.", "vs.", "ms.", "pres."]
-apostrophe_s = re.compile(r"'S")
+
 
 
 def build_ngram_dict(words):
@@ -84,6 +85,8 @@ def build_sentence(d):
 def has_bad_ending(sentence):
     words = sentence.split()
     if words[-1].lower() in faulty_endings:
+        return True
+    elif re.match(initial, words[-1]):
         return True
     else:
         return False
@@ -184,14 +187,13 @@ def tweet(text):
 
     # Send the tweet and log success or failure
     try:
-        text = text.title()
-        text = re.sub(apostrophe_s, "'s", text) 
-        api.update_status(text)
+        text_title = string.capwords(text)
+        api.update_status(text_title)
     except tweepy.error.TweepError as e:
         log(e.message)
     else:
-        print("Success: %s" % text)
-        log("Tweeted: " + text)
+        print("Success: %s" % text_title)
+        log("Tweeted: " + text_title)
         return True
 
 
